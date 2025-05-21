@@ -1,4 +1,4 @@
-package com.example.qweasdqwerfd
+package com.example.qweasdqwerfd.main_components
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -11,8 +11,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            ProjektioTheme {
-
+            ProjektioTheme(darkTheme = true) {
+                MainScreen()
             }
         }
     }

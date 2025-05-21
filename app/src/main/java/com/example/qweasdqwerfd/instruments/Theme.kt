@@ -10,17 +10,19 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Blue
+import androidx.compose.ui.graphics.Color.Companion.DarkGray
+import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.platform.LocalContext
 
 val DarkColorScheme = darkColorScheme(
-    primary = Blue,
-    onPrimary = Color.White,
+    primary = White,
+    onPrimary = Color.Black,
     primaryContainer = Blue,
     onPrimaryContainer = Color.White,
 
-    secondary = PurpleGrey80,
+    secondary = DarkGray,
     onSecondary = Color(0xFF332D41),
-    secondaryContainer = PurpleGrey40,
+    secondaryContainer = DarkGray,
     onSecondaryContainer = PurpleGrey80,
 
     tertiary = Pink80,
@@ -30,8 +32,8 @@ val DarkColorScheme = darkColorScheme(
 
     background = Color(0xFF1C1B1F),
     onBackground = Color(0xFFE6E1E5),
-    surface = Color(0xFF1C1B1F),
-    onSurface = Color(0xFFE6E1E5),
+    surface = Color(0xFF1c1b20),
+    onSurface = Color(0xFF919095),
     surfaceVariant = Color(0xFF49454F),
     onSurfaceVariant = Color(0xFFCAC4D0),
 
@@ -47,8 +49,8 @@ val DarkColorScheme = darkColorScheme(
 )
 
 val LightColorScheme = lightColorScheme(
-    primary = Blue,
-    onPrimary = Color.White,
+    primary = Color.Black,
+    onPrimary = White,
     primaryContainer = Blue,
     onPrimaryContainer = Color.White,
 
@@ -83,7 +85,6 @@ val LightColorScheme = lightColorScheme(
 @Composable
 fun ProjektioTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
