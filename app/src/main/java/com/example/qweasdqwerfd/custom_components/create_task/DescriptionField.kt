@@ -1,4 +1,4 @@
-package com.example.qweasdqwerfd.custom_components
+package com.example.qweasdqwerfd.custom_components.create_task
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -17,10 +17,9 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 
-
 @Composable
-fun EmailOrNickNameField(
-    onTitleChanged: (String) -> Unit
+fun DescriptionField(
+    onTitleChanged: (String) -> Unit,
 ) {
     var focusManager = LocalFocusManager.current
     var title by remember { mutableStateOf("") }
@@ -39,17 +38,18 @@ fun EmailOrNickNameField(
         keyboardActions = KeyboardActions(
             onDone = { focusManager.clearFocus() }
         ),
-        maxLines = 1,  // Максимум видимых строк
-        label = { Text(
-            text = "Email или никнейм",
-            color = MaterialTheme.colorScheme.onSurface
-        ) },
-        placeholder = { Text("Email или никнейм") },
+        maxLines = 5,  // Максимум видимых строк
+        label = {
+            Text(
+                text = "Описание",
+                color = MaterialTheme.colorScheme.onSurface
+            )
+        },
+        placeholder = { Text("Описание") },
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 15.dp)
-        ,
-        singleLine = false, //многострочный ввод
+            .padding(horizontal = 15.dp),
+        singleLine = false,
         isError = isError,
         supportingText = {
             if (isError) {
@@ -57,6 +57,4 @@ fun EmailOrNickNameField(
             }
         }
     )
-
-
 }

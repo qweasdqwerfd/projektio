@@ -1,4 +1,4 @@
-package com.example.qweasdqwerfd.custom_components
+package com.example.qweasdqwerfd.custom_components.authorization.sign_up
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding

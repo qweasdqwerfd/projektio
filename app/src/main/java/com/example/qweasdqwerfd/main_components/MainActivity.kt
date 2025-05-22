@@ -12,7 +12,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ProjektioTheme(darkTheme = true) {
-                MainScreen()
+                MainComponents()
             }
         }
     }

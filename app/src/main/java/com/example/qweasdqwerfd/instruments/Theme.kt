@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.platform.LocalContext
 
 val DarkColorScheme = darkColorScheme(
-    primary = White,
+    primary = ButtonColor,
     onPrimary = Color.Black,
     primaryContainer = Blue,
     onPrimaryContainer = Color.White,
@@ -34,8 +34,8 @@ val DarkColorScheme = darkColorScheme(
     onBackground = Color(0xFFE6E1E5),
     surface = Color(0xFF1c1b20),
     onSurface = Color(0xFF919095),
-    surfaceVariant = Color(0xFF49454F),
-    onSurfaceVariant = Color(0xFFCAC4D0),
+    surfaceVariant = DarkSurface,
+    onSurfaceVariant = TextColor,
 
     outline = Color(0xFF938F99),
     outlineVariant = Color(0xFF49454F),
@@ -49,7 +49,7 @@ val DarkColorScheme = darkColorScheme(
 )
 
 val LightColorScheme = lightColorScheme(
-    primary = Color.Black,
+    primary = ButtonColor,
     onPrimary = White,
     primaryContainer = Blue,
     onPrimaryContainer = Color.White,

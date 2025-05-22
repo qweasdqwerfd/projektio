@@ -6,28 +6,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.navigation.NavHostController
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import com.example.qweasdqwerfd.custom_components.CancelIconButton
+import com.example.qweasdqwerfd.custom_components.top_bar.CancelIconButton
+import com.example.qweasdqwerfd.custom_components.top_bar.ProfileButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(navController: NavHostController) {
+fun TopBar(navController: NavHostController, currentRoute: String) {
 
-    var currentRoute by remember { mutableStateOf("") }
 
-    LaunchedEffect(navController) {
-        navController.currentBackStackEntryFlow.collect { backStackEntry ->
-            currentRoute = backStackEntry.destination.route ?: "Ресурсы"
-        }
-    }
 
     TopAppBar(
 
@@ -35,6 +24,9 @@ fun TopBar(navController: NavHostController) {
             Text(
                 text = when (currentRoute) {
                     "sign_up" -> "Создать профиль"
+                    "all_tasks" -> "Мои доски"
+                    "create_task" -> "Создать доску"
+                    "profile" -> "Профиль"
                     else -> ""
                 }
             )
@@ -46,10 +38,25 @@ fun TopBar(navController: NavHostController) {
                     navController.navigate("sign_in")
                 }
             }
+            if (currentRoute == "create_task") {
+                CancelIconButton {
+                    navController.navigate("all_tasks")
+                }
+            }
+            if (currentRoute == "profile") {
+                CancelIconButton {
+                    navController.navigate("all_tasks")
+                }
+            }
         },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.surface,
             titleContentColor = MaterialTheme.colorScheme.onSurface
         ),
+        actions = {
+            when (currentRoute) {
+                "all_tasks" -> ProfileButton(navController)
+            }
+        }
     )
 }

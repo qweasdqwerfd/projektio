@@ -12,3 +12,4 @@ val Pink40 = Color(0xFF7D5260)
 
 val DarkSurface = Color(0xFF1c1b20)
 val TextColor = Color(0xFF919095)
+val ButtonColor = Color(0xFF4c90ec)
