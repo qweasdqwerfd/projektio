@@ -1,4 +1,4 @@
-package com.example.qweasdqwerfd.custom_components
+package com.example.qweasdqwerfd.custom_components.main_screen
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.FloatingActionButton

@@ -21,7 +21,7 @@ import com.example.qweasdqwerfd.custom_components.authorization.sign_up.CreatePr
 
 @Preview(showBackground = true)
 @Composable
-fun SignUp() {
+fun SignUpScreen() {
     var nickname by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
@@ -47,7 +47,6 @@ fun SignUp() {
             }
         }
         SecondPassword(
-            label = "Повторите пароль",
             onPasswordChanged = {
                 confirmPassword = it
                 confirmPasswordError = null // сбрасываем при изменении

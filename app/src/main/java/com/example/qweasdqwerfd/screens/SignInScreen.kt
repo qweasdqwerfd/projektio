@@ -29,7 +29,7 @@ import com.example.qweasdqwerfd.custom_components.authorization.sign_in.LogInBut
 import com.example.qweasdqwerfd.custom_components.authorization.sign_in.MainIcon
 
 @Composable
-fun SignIn(navHostController: NavHostController) {
+fun SignInScreen(navHostController: NavHostController) {
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -66,15 +66,21 @@ fun SignIn(navHostController: NavHostController) {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
 
-            ForgetPasswordTextButton()
-            LogInButton(navHostController)
+            ForgetPasswordTextButton {
+                navHostController.navigate("forget")
+            }
+            LogInButton {
+                navHostController.navigate("all_tasks")
+            }
         }
 
         MainDivider()
 
         Spacer(Modifier.height(10.dp))
 
-        CreateProfileButtonMainMenu(navHostController)
+        CreateProfileButtonMainMenu {
+            navHostController.navigate("sign_up")
+        }
 
 
     }

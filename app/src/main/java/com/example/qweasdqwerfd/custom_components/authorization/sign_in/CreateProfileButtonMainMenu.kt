@@ -15,9 +15,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 
 @Composable
-fun CreateProfileButtonMainMenu(navHostController: NavHostController) {
+fun CreateProfileButtonMainMenu(onClick: () -> Unit) {
     OutlinedButton(
-        onClick = { navHostController.navigate("sign_up") },
+        onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
             .height(50.dp),

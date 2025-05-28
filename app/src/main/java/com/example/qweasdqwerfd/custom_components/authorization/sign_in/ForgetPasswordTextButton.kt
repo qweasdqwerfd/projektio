@@ -9,9 +9,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ForgetPasswordTextButton() {
+fun ForgetPasswordTextButton(onClick: () -> Unit) {
     TextButton(
-        onClick = {},
+        onClick = onClick,
         modifier = Modifier.offset(x=-7.dp)
     ) {
         Text(

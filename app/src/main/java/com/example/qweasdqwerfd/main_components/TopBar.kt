@@ -27,6 +27,7 @@ fun TopBar(navController: NavHostController, currentRoute: String) {
                     "all_tasks" -> "Мои доски"
                     "create_task" -> "Создать доску"
                     "profile" -> "Профиль"
+                    "forget" -> "Восстановление пароля"
                     else -> ""
                 }
             )
@@ -46,6 +47,11 @@ fun TopBar(navController: NavHostController, currentRoute: String) {
             if (currentRoute == "profile") {
                 CancelIconButton {
                     navController.navigate("all_tasks")
+                }
+            }
+            if (currentRoute == "forget") {
+                CancelIconButton {
+                    navController.navigate("sign_in")
                 }
             }
         },

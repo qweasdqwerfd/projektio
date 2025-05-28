@@ -1,4 +1,4 @@
-package com.example.qweasdqwerfd.custom_components.authorization.sign_up
+package com.example.qweasdqwerfd.custom_components.forget_password
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -30,9 +30,10 @@ import androidx.compose.ui.unit.dp
 import com.example.qweasdqwerfd.R
 
 @Composable
-fun PasswordSignUpField(
+fun NewPassword(
     onTitleChanged: (String) -> Unit,
 ) {
+
     val focusManager = LocalFocusManager.current
     var title by remember { mutableStateOf("") }
     var isError by remember { mutableStateOf(false) }
@@ -56,13 +57,13 @@ fun PasswordSignUpField(
             singleLine = true,
             label = {
                 Text(
-                    text = "Пароль",
+                    text = "Новый пароль",
                     color = MaterialTheme.colorScheme.onSurface,
                 )
             },
             placeholder = {
                 Text(
-                    "Пароль",
+                    "Новый пароль",
                     color = MaterialTheme.colorScheme.onSurface,
                 )
             },
@@ -109,4 +110,5 @@ fun PasswordSignUpField(
         }
 
     }
+
 }

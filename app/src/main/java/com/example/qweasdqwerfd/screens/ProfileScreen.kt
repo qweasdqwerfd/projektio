@@ -13,10 +13,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.qweasdqwerfd.custom_components.ExitButton
+import com.example.qweasdqwerfd.custom_components.main_screen.ExitButton
 
 @Composable
-fun Profile(navHostController: NavHostController) {
+fun ProfileScreen(navHostController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxSize()

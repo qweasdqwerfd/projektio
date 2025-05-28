@@ -31,7 +31,6 @@ import com.example.qweasdqwerfd.R
 
 @Composable
 fun SecondPassword(
-    label: String = "Пароль",
     onPasswordChanged: (String) -> Unit,
     externalError: String? = null // <- добавлено
 ) {
@@ -54,8 +53,8 @@ fun SecondPassword(
             keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
             maxLines = 1,
             singleLine = true,
-            label = { Text(label, color = MaterialTheme.colorScheme.onSurface) },
-            placeholder = { Text(label, color = MaterialTheme.colorScheme.onSurface) },
+            label = { Text("Повторите пароль", color = MaterialTheme.colorScheme.onSurface) },
+            placeholder = { Text("Повторите пароль", color = MaterialTheme.colorScheme.onSurface) },
             visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             trailingIcon = {
                 val image = if (passwordVisible)

@@ -16,7 +16,7 @@ import com.example.qweasdqwerfd.custom_components.create_task.NameField
 import com.example.qweasdqwerfd.custom_components.create_task.PrivateBoardCheckbox
 
 @Composable
-fun CreateTask(navHostController: NavHostController) {
+fun CreateTaskScreen(navHostController: NavHostController) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,

@@ -4,12 +4,13 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.qweasdqwerfd.custom_components.FloatActionBar
-import com.example.qweasdqwerfd.screens.AllTasks
-import com.example.qweasdqwerfd.screens.CreateTask
-import com.example.qweasdqwerfd.screens.Profile
-import com.example.qweasdqwerfd.screens.SignIn
-import com.example.qweasdqwerfd.screens.SignUp
+import com.example.qweasdqwerfd.custom_components.main_screen.FloatActionBar
+import com.example.qweasdqwerfd.screens.AllTasksScreen
+import com.example.qweasdqwerfd.screens.CreateTaskScreen
+import com.example.qweasdqwerfd.screens.ForgetPasswordScreen
+import com.example.qweasdqwerfd.screens.ProfileScreen
+import com.example.qweasdqwerfd.screens.SignInScreen
+import com.example.qweasdqwerfd.screens.SignUpScreen
 
 @Composable
 fun NavGraph(
@@ -20,22 +21,25 @@ fun NavGraph(
         startDestination = "sign_in"
     ) {
         composable("sign_in") {
-            SignIn(navHostController)
+            SignInScreen(navHostController)
         }
         composable("sign_up") {
-            SignUp()
+            SignUpScreen()
         }
         composable("all_tasks") {
-            AllTasks()
+            AllTasksScreen()
         }
         composable("create_task") {
-            CreateTask(navHostController)
+            CreateTaskScreen(navHostController)
         }
         composable("plus") {
             FloatActionBar(navHostController)
         }
         composable("profile") {
-            Profile(navHostController)
+            ProfileScreen(navHostController)
+        }
+        composable("forget") {
+            ForgetPasswordScreen(navHostController)
         }
     }
 }

@@ -11,11 +11,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 
 @Composable
-fun LogInButton(navHostController: NavHostController) {
+fun LogInButton(onClick: () -> Unit) {
     Button(
-        onClick = {
-            navHostController.navigate("all_tasks")
-        },
+        onClick = onClick,
         colors = ButtonDefaults.buttonColors(
             contentColor = MaterialTheme.colorScheme.onPrimary,
             containerColor = MaterialTheme.colorScheme.primary,

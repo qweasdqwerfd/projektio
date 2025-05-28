@@ -1,4 +1,4 @@
-package com.example.qweasdqwerfd.custom_components.authorization.sign_up
+package com.example.qweasdqwerfd.custom_components.forget_password
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,12 +13,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 
 @Composable
-fun CreateProfile(
+fun ContinueButton(
     password: String,
     confirmPassword: String,
-    onPasswordMismatch: (String?) -> Unit
+    onPasswordMismatch: (String?) -> Unit,
+    navHostController: NavHostController,
 ) {
     OutlinedButton(
         onClick = {
@@ -26,6 +28,7 @@ fun CreateProfile(
                 onPasswordMismatch("Пароли не совпадают")
             } else {
                 onPasswordMismatch(null)
+                navHostController.navigate("sign_in")
                 // Всё ок — создаём профиль
             }
         },
@@ -40,6 +43,6 @@ fun CreateProfile(
             containerColor = MaterialTheme.colorScheme.primary
         )
     ) {
-        Text(text = "Создать профиль")
+        Text(text = "Продолжить")
     }
 }
