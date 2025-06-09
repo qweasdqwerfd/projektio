@@ -1,4 +1,4 @@
-package com.example.qweasdqwerfd.screens
+package com.example.qweasdqwerfd.screens.tasks
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -76,7 +76,9 @@ fun ProfileScreen(navHostController: NavHostController) {
                      color = MaterialTheme.colorScheme.onSurface,
                      style = MaterialTheme.typography.bodyMedium
                  )
-                 ExitButton(navHostController)
+                 ExitButton {
+                     navHostController.navigate("sign_in")
+                 }
              }
          }
     }

@@ -1,4 +1,4 @@
-package com.example.qweasdqwerfd.screens
+package com.example.qweasdqwerfd.screens.tasks
 
 import androidx.compose.runtime.Composable
 

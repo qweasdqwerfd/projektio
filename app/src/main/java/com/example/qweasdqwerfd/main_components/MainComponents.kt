@@ -13,12 +13,24 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.example.qweasdqwerfd.custom_components.main_screen.FloatActionBar
+import com.example.qweasdqwerfd.screens.auth.SignInScreen
+import com.example.qweasdqwerfd.screens.auth.SignUpScreen
 
 @Composable
-fun MainComponents() {
-
+fun MainComponents(viewModel: MyViewModel) {
     val navController = rememberNavController()
+
     var currentRoute by remember { mutableStateOf("") }
+
+    SignUpScreen(
+        viewModel = viewModel,
+        navGraph = navController
+    )
+
+    SignInScreen(
+        navHostController = navController,
+        viewModel = viewModel
+    )
 
     LaunchedEffect(navController) {
         navController.currentBackStackEntryFlow.collect { backStackEntry ->
@@ -36,7 +48,10 @@ fun MainComponents() {
         },
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
-            NavGraph(navController)
+            NavGraph(
+                viewModel,
+                navController
+            )
         }
 
     }

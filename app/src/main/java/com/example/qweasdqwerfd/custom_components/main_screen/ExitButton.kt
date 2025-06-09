@@ -11,10 +11,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 
 @Composable
-fun ExitButton(navHostController: NavHostController) {
+fun ExitButton(onClick: () -> Unit) {
     Button(
         onClick = {
-            navHostController.navigate("sign_in")
+            onClick()
         },
         colors = ButtonDefaults.buttonColors(
             contentColor = MaterialTheme.colorScheme.onSurface,

@@ -16,18 +16,11 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun CreateProfile(
-    password: String,
-    confirmPassword: String,
-    onPasswordMismatch: (String?) -> Unit
+    onRegisterClicked: () -> Unit
 ) {
     OutlinedButton(
         onClick = {
-            if (password != confirmPassword) {
-                onPasswordMismatch("Пароли не совпадают")
-            } else {
-                onPasswordMismatch(null)
-                // Всё ок — создаём профиль
-            }
+            onRegisterClicked()
         },
         modifier = Modifier
             .fillMaxWidth()
