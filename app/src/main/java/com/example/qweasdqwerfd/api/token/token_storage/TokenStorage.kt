@@ -1,4 +1,4 @@
-package com.example.qweasdqwerfd.api.token
+package com.example.qweasdqwerfd.api.token.token_storage
 
 interface TokenStorage {
     suspend fun saveTokens(accessToken: String, refreshToken: String)

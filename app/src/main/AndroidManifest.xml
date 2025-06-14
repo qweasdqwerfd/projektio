@@ -8,6 +8,7 @@
 
     <application
         android:usesCleartextTraffic="true"
+        android:name=".MyApp"
 
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -22,7 +23,8 @@
             android:name=".main_components.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Projektio">
+            android:theme="@style/Theme.Projektio"
+            tools:ignore="Instantiatable">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

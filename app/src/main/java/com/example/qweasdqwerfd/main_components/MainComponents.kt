@@ -1,58 +1,51 @@
 package com.example.qweasdqwerfd.main_components
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.produceState
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
+import com.example.qweasdqwerfd.api.token.token_storage.TokenStorageImpl
 import com.example.qweasdqwerfd.custom_components.main_screen.FloatActionBar
-import com.example.qweasdqwerfd.screens.auth.SignInScreen
-import com.example.qweasdqwerfd.screens.auth.SignUpScreen
+import com.example.qweasdqwerfd.help_const.currentRoute
 
 @Composable
-fun MainComponents(viewModel: MyViewModel) {
+fun MainComponents(viewModel: MyViewModel, context: MainActivity) {
     val navController = rememberNavController()
+    val routeState = currentRoute(navController)
+    val route = routeState.value
 
-    var currentRoute by remember { mutableStateOf("") }
-
-    SignUpScreen(
-        viewModel = viewModel,
-        navGraph = navController
-    )
-
-    SignInScreen(
-        navHostController = navController,
-        viewModel = viewModel
-    )
-
-    LaunchedEffect(navController) {
-        navController.currentBackStackEntryFlow.collect { backStackEntry ->
-            currentRoute = backStackEntry.destination.route ?: "Ресурсы"
-        }
+    val tokenStorage = TokenStorageImpl(context)
+    val accessToken = produceState<String?>(null) {
+        value = tokenStorage.getAccessToken()
     }
 
+    LaunchedEffect(route) {
+        Log.d("DEBUG", "route = $route")
+    }
 
     Scaffold(
-        topBar = { TopBar(navController, currentRoute) },
+        topBar = {
+            if (route != "sign_in" && route.isNotEmpty()) {
+                TopBar(navController, route)
+            }
+        },
         floatingActionButtonPosition = FabPosition.Center,
         floatingActionButton = {
-            if (currentRoute == "all_tasks")
+            if (route == "all_tasks") {
                 FloatActionBar(navController)
-        },
+            }
+        }
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
-            NavGraph(
-                viewModel,
-                navController
-            )
+            if (accessToken.value != null) {
+                NavGraph(viewModel, navController, accessToken.value)
+            }
         }
-
     }
 }

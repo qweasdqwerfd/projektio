@@ -17,13 +17,20 @@ import com.example.qweasdqwerfd.screens.auth.SignUpScreen
 fun NavGraph(
     viewModel: MyViewModel = viewModel(),
     navHostController: NavHostController,
+    accessToken: String?
 ) {
+
+    val startDestination = if (!accessToken.isNullOrEmpty()) "all_tasks" else "sign_in"
+
     NavHost(
         navController = navHostController,
-        startDestination = "sign_in"
+        startDestination = startDestination
     ) {
         composable("sign_in") {
-            SignInScreen(navHostController, viewModel)
+            SignInScreen(
+                navHostController = navHostController,
+                viewModel = viewModel
+            )
         }
         composable("sign_up") {
             SignUpScreen(
