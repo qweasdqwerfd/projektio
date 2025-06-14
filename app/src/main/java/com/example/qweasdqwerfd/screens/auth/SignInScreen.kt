@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -20,8 +21,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.qweasdqwerfd.api.token.token_storage.TokenStorageImpl
 import com.example.qweasdqwerfd.custom_components.authorization.sign_in.EmailOrNickNameField
 import com.example.qweasdqwerfd.custom_components.authorization.sign_in.PasswordSignInField
 import com.example.qweasdqwerfd.custom_components.authorization.sign_in.MainDivider
@@ -36,12 +39,14 @@ fun SignInScreen(
     navHostController: NavHostController,
     viewModel: MyViewModel,
 ) {
+    val context = LocalContext.current
+    val tokenStorage = remember { TokenStorageImpl(context) }
 
     var emailOrNick by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
     val loginState by viewModel.loginState
-
+    val authResponse by viewModel.authResponse
 
     Column(
         modifier = Modifier
@@ -49,31 +54,27 @@ fun SignInScreen(
             .background(MaterialTheme.colorScheme.surface),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
-
     ) {
         MainIcon()
 
         Column(
             verticalArrangement = Arrangement.spacedBy((-14).dp)
         ) {
-
             Spacer(Modifier.heightIn(10.dp))
-
             EmailOrNickNameField {
                 emailOrNick = it
             }
             PasswordSignInField {
                 password = it
             }
-
         }
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 15.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-
             ForgetPasswordTextButton {
                 navHostController.navigate("forget")
             }
@@ -83,7 +84,6 @@ fun SignInScreen(
                     email = emailOrNick,
                     password = password
                 )
-
             }
         }
 
@@ -96,11 +96,18 @@ fun SignInScreen(
         }
 
         when (loginState) {
-            true -> navHostController.navigate("all_tasks")
-            false -> Text(text = "Неправильный логин или пароль", color = Color.Red)
+            true -> {
+                LaunchedEffect(Unit) {
+                    authResponse?.let {
+                        tokenStorage.saveTokens(it.accessToken, it.refreshToken)
+                        navHostController.navigate("all_tasks") {
+                            popUpTo("sign_in") { inclusive = true }
+                        }
+                    }
+                }
+            }
+            false -> Text("Неправильный логин или пароль", color = Color.Red)
             else -> Text("")
         }
-
-
     }
 }
