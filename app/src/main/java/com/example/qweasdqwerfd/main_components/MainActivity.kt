@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavHostController
 import com.example.qweasdqwerfd.instruments.ProjektioTheme
 
 class MainActivity : ComponentActivity() {
@@ -18,7 +17,10 @@ class MainActivity : ComponentActivity() {
             val viewModel = ViewModelProvider(this)[MyViewModel::class.java]
 
             ProjektioTheme(darkTheme = true) {
-                MainComponents(viewModel)
+                MainComponents(
+                    viewModel,
+                    this
+                )
 
             }
         }

@@ -1,28 +1,34 @@
 package com.example.qweasdqwerfd.api.token
 
+import com.example.qweasdqwerfd.api.token.token_storage.TokenStorage
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
 
 class AuthInterceptor(
     private val tokenStorage: TokenStorage,
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepositoryImpl,
 ) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
         var request = chain.request()
+        val path = request.url.encodedPath
 
-        val accessToken = runBlocking {
-            tokenStorage.getAccessToken()
+        // Не добавляем токен, если это login или register
+        if (!path.contains("/auth/login") && !path.contains("/auth/register")) {
+            val accessToken = runBlocking {
+                tokenStorage.getAccessToken()
+            }
+
+            request = request.newBuilder()
+                .addHeader("Authorization", "Bearer $accessToken")
+                .build()
         }
-
-        request = request.newBuilder()
-            .addHeader("Authorization", "Bearer $accessToken")
-            .build()
 
         var response = chain.proceed(request)
 
-        if (response.code == 401) {
+        // Обработка истекшего токена
+        if (response.code == 401 && !path.contains("/auth/login") && !path.contains("/auth/register")) {
             response.close()
 
             val refreshToken = runBlocking {
@@ -51,4 +57,3 @@ class AuthInterceptor(
         return response
     }
 }
-

@@ -17,7 +17,6 @@ import com.example.qweasdqwerfd.custom_components.top_bar.ProfileButton
 fun TopBar(navController: NavHostController, currentRoute: String) {
 
 
-
     TopAppBar(
 
         title = {
