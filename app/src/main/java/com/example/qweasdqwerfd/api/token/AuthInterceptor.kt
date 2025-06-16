@@ -15,7 +15,11 @@ class AuthInterceptor(
         val path = request.url.encodedPath
 
         // Не добавляем токен, если это login или register
-        if (!path.contains("/auth/login") && !path.contains("/auth/register")) {
+        if (
+            !path.contains("/auth/login") &&
+            !path.contains("/auth/register") &&
+            !path.contains("/auth/logout")
+        ) {
             val accessToken = runBlocking {
                 tokenStorage.getAccessToken()
             }

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -12,19 +13,19 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.qweasdqwerfd.custom_components.main_screen.FloatActionBar
 import com.example.qweasdqwerfd.help_const.currentRoute
-import com.example.qweasdqwerfd.screens.tasks.AllTasksScreen
-import com.example.qweasdqwerfd.screens.tasks.CreateTaskScreen
 import com.example.qweasdqwerfd.screens.auth.ForgetPasswordScreen
-import com.example.qweasdqwerfd.screens.tasks.ProfileScreen
 import com.example.qweasdqwerfd.screens.auth.SignInScreen
 import com.example.qweasdqwerfd.screens.auth.SignUpScreen
+import com.example.qweasdqwerfd.screens.tasks.AllTasksScreen
+import com.example.qweasdqwerfd.screens.tasks.CreateTaskScreen
+import com.example.qweasdqwerfd.screens.tasks.ProfileScreen
 
 @Composable
 fun NavGraph(
     viewModel: MyViewModel = viewModel(),
     navHostController: NavHostController,
-    accessToken: String?
 ) {
+    val accessToken by viewModel.accessToken
     val startDestination = if (!accessToken.isNullOrEmpty()) "all_tasks" else "sign_in"
     val routeState = currentRoute(navHostController)
     val route = routeState.value
@@ -41,6 +42,8 @@ fun NavGraph(
             }
         },
         floatingActionButtonPosition = FabPosition.Center
+
+
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
             NavHost(
@@ -69,7 +72,10 @@ fun NavGraph(
                     FloatActionBar(navHostController)
                 }
                 composable("profile") {
-                    ProfileScreen(navHostController)
+                    ProfileScreen(
+                        navHostController,
+                        viewModel
+                    )
                 }
                 composable("forget") {
                     ForgetPasswordScreen(navHostController)

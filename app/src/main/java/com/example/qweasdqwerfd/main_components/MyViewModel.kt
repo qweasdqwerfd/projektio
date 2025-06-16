@@ -1,21 +1,33 @@
 package com.example.qweasdqwerfd.main_components
 
+import android.app.Application
 import androidx.annotation.OptIn
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.media3.common.util.Log
 import androidx.media3.common.util.UnstableApi
 import com.example.qweasdqwerfd.api.RetrofitClient
 import com.example.qweasdqwerfd.api.models.auth.AuthResponse
 import com.example.qweasdqwerfd.api.models.auth.LoginRequest
+import com.example.qweasdqwerfd.api.models.auth.RefreshRequest
 import com.example.qweasdqwerfd.api.models.auth.RegisterRequest
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import com.example.qweasdqwerfd.api.token.token_storage.TokenStorageImpl
 import kotlinx.coroutines.launch
 
-class MyViewModel : ViewModel() {
+class MyViewModel(application: Application) : AndroidViewModel(application) {
+
+    private val tokenStorage = TokenStorageImpl(application.applicationContext)
+
+    private val _accessToken = mutableStateOf<String?>(null)
+    val accessToken: State<String?> = _accessToken
+
+    init {
+        viewModelScope.launch {
+            _accessToken.value = tokenStorage.getAccessToken()
+        }
+    }
 
     private val _registrationState = mutableStateOf<Boolean?>(null)
     val registrationState: State<Boolean?> = _registrationState
@@ -66,4 +78,29 @@ class MyViewModel : ViewModel() {
             }
         }
     }
+
+    @OptIn(UnstableApi::class)
+    fun logout(refreshToken: String, onSuccess: () -> Unit, onError: (String) -> Unit) {
+        viewModelScope.launch {
+            try {
+                val response = RetrofitClient.instance.logout(RefreshRequest(refreshToken))
+
+                Log.d("LOGOUT", "Токен перед отправкой logout: $refreshToken")
+                Log.d("LOGOUT", "Код ответа: ${response.code()}, тело: ${response.errorBody()?.string()}")
+
+                if (response.isSuccessful) {
+                    onSuccess()
+                } else {
+                    onError("Ошибка при выходе")
+                }
+            } catch (e: Exception) {
+                onError("Сетевая ошибка: ${e.message}")
+            }
+        }
+    }
+    fun clearAccessToken() {
+        _accessToken.value = null
+    }
+
+
 }

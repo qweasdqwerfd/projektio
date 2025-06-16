@@ -4,7 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.getValue
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.compose.rememberNavController
 import com.example.qweasdqwerfd.instruments.ProjektioTheme
 
 class MainActivity : ComponentActivity() {
@@ -13,15 +15,18 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
+            val viewModel = ViewModelProvider(
+                this,
+                ViewModelProvider.AndroidViewModelFactory.getInstance(application)
+            )[MyViewModel::class.java]
 
-            val viewModel = ViewModelProvider(this)[MyViewModel::class.java]
+            val navController = rememberNavController()
 
             ProjektioTheme(darkTheme = true) {
-                MainComponents(
-                    viewModel,
-                    this
+                NavGraph(
+                    viewModel = viewModel,
+                    navHostController = navController,
                 )
-
             }
         }
     }

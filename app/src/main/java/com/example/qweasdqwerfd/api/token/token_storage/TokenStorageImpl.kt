@@ -28,6 +28,13 @@ class TokenStorageImpl(private val context: Context) : TokenStorage {
         }
     }
 
+    override suspend fun clearTokens() {
+        dataStore.edit { prefs ->
+            prefs.remove(ACCESS_TOKEN_KEY)
+            prefs.remove(REFRESH_TOKEN_KEY)
+        }
+    }
+
     override suspend fun getAccessToken(): String? {
         val prefs = dataStore.data.first()
         return prefs[ACCESS_TOKEN_KEY]

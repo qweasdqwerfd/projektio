@@ -14,9 +14,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.qweasdqwerfd.custom_components.main_screen.ExitButton
+import com.example.qweasdqwerfd.main_components.MyViewModel
 
 @Composable
-fun ProfileScreen(navHostController: NavHostController) {
+fun ProfileScreen(navHostController: NavHostController, viewModel: MyViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -76,9 +77,10 @@ fun ProfileScreen(navHostController: NavHostController) {
                      color = MaterialTheme.colorScheme.onSurface,
                      style = MaterialTheme.typography.bodyMedium
                  )
-                 ExitButton {
-                     navHostController.navigate("sign_in")
-                 }
+                 ExitButton(
+                     navHostController,
+                     viewModel
+                 )
              }
          }
     }
