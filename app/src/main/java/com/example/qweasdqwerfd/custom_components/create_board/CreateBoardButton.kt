@@ -1,4 +1,4 @@
-package com.example.qweasdqwerfd.custom_components.create_task
+package com.example.qweasdqwerfd.custom_components.create_board
 
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
@@ -12,10 +12,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 
 @Composable
-fun CreateTaskButton(navHostController: NavHostController) {
+fun CreateBoardButton(
+    onClick: () -> Unit
+    ) {
     Button(
         onClick = {
-            navHostController.navigate("all_tasks")
+            onClick()
         },
         colors = ButtonDefaults.buttonColors(
             contentColor = MaterialTheme.colorScheme.onPrimary,

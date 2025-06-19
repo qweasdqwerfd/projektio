@@ -7,21 +7,20 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
-import com.example.qweasdqwerfd.api.token.token_storage.TokenStorageImpl
-import com.example.qweasdqwerfd.main_components.MyViewModel
+import com.example.qweasdqwerfd.api.token.token_storage.TokenStorageSingletonImpl
+import com.example.qweasdqwerfd.main_components.view_models.AuthViewModel
 import kotlinx.coroutines.launch
 
 @Composable
-fun ExitButton(navHostController: NavHostController, viewModel: MyViewModel) {
+fun ExitButton(navHostController: NavHostController, viewModel: AuthViewModel) {
 
     val context = LocalContext.current
-    val tokenStorage = remember { TokenStorageImpl(context) }
+    val tokenStorage = TokenStorageSingletonImpl
 
     Button(
         onClick = {

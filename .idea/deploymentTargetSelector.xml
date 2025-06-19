@@ -8,6 +8,9 @@
       <SelectionState runConfigName="CreateTask">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
+      <SelectionState runConfigName="AllBoardsScreen - Dark Theme">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
     </selectionStates>
   </component>
 </project>

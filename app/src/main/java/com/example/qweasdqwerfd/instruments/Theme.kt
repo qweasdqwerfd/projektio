@@ -21,7 +21,7 @@ val DarkColorScheme = darkColorScheme(
     onPrimaryContainer = Color.White,
 
     secondary = DarkGray,
-    onSecondary = Color(0xFF332D41),
+    onSecondary = DescriptionTextColor,
     secondaryContainer = DarkGray,
     onSecondaryContainer = PurpleGrey80,
 
@@ -35,7 +35,7 @@ val DarkColorScheme = darkColorScheme(
     surface = Color(0xFF1c1b20),
     onSurface = Color(0xFF919095),
     surfaceVariant = DarkSurface,
-    onSurfaceVariant = TextColor,
+    onSurfaceVariant = DescriptionTextColor,
 
     outline = Color(0xFF938F99),
     outlineVariant = Color(0xFF49454F),

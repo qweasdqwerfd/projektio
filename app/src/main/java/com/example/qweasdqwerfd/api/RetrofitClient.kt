@@ -1,6 +1,7 @@
 package com.example.qweasdqwerfd.api
 
 import com.example.qweasdqwerfd.api.service.AuthApiService
+import com.example.qweasdqwerfd.api.service.BoardApiService
 import com.example.qweasdqwerfd.api.token.AuthInterceptor
 import com.example.qweasdqwerfd.api.token.AuthRepositoryImpl
 import com.example.qweasdqwerfd.api.token.token_storage.TokenStorage
@@ -25,16 +26,25 @@ object RetrofitClient {
 
     private val client: OkHttpClient
         get() = OkHttpClient.Builder()
-            .addInterceptor(logging)
             .addInterceptor(authInterceptor)
+            .addNetworkInterceptor(logging)
             .build()
 
-    val instance: AuthApiService by lazy {
+
+    private val retrofit: Retrofit by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(AuthApiService::class.java)
+    }
+
+    // Сервисы
+    val authApiService: AuthApiService by lazy {
+        retrofit.create(AuthApiService::class.java)
+    }
+
+    val boardApiService: BoardApiService by lazy {
+        retrofit.create(BoardApiService::class.java)
     }
 }

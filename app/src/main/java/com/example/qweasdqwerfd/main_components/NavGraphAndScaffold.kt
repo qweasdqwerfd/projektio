@@ -13,19 +13,22 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.qweasdqwerfd.custom_components.main_screen.FloatActionBar
 import com.example.qweasdqwerfd.help_const.currentRoute
+import com.example.qweasdqwerfd.main_components.view_models.AuthViewModel
+import com.example.qweasdqwerfd.main_components.view_models.BoardViewModel
 import com.example.qweasdqwerfd.screens.auth.ForgetPasswordScreen
 import com.example.qweasdqwerfd.screens.auth.SignInScreen
 import com.example.qweasdqwerfd.screens.auth.SignUpScreen
-import com.example.qweasdqwerfd.screens.tasks.AllTasksScreen
-import com.example.qweasdqwerfd.screens.tasks.CreateTaskScreen
-import com.example.qweasdqwerfd.screens.tasks.ProfileScreen
+import com.example.qweasdqwerfd.screens.boards.AllBoardsScreen
+import com.example.qweasdqwerfd.screens.boards.CreateBoardScreen
+import com.example.qweasdqwerfd.screens.boards.ProfileScreen
 
 @Composable
-fun NavGraph(
-    viewModel: MyViewModel = viewModel(),
+fun NavGraphAndScaffold(
+    authViewModel: AuthViewModel = viewModel(),
     navHostController: NavHostController,
+    boardViewModel: BoardViewModel = viewModel()
 ) {
-    val accessToken by viewModel.accessToken
+    val accessToken by authViewModel.accessToken
     val startDestination = if (!accessToken.isNullOrEmpty()) "all_tasks" else "sign_in"
     val routeState = currentRoute(navHostController)
     val route = routeState.value
@@ -53,20 +56,22 @@ fun NavGraph(
                 composable("sign_in") {
                     SignInScreen(
                         navHostController = navHostController,
-                        viewModel = viewModel
+                        viewModel = authViewModel
                     )
                 }
                 composable("sign_up") {
                     SignUpScreen(
                         navGraph = navHostController,
-                        viewModel = viewModel
+                        viewModel = authViewModel
                     )
                 }
                 composable("all_tasks") {
-                    AllTasksScreen()
+                    AllBoardsScreen(boardViewModel)
                 }
                 composable("create_task") {
-                    CreateTaskScreen(navHostController)
+                    CreateBoardScreen(
+                        navHostController
+                    )
                 }
                 composable("plus") {
                     FloatActionBar(navHostController)
@@ -74,12 +79,13 @@ fun NavGraph(
                 composable("profile") {
                     ProfileScreen(
                         navHostController,
-                        viewModel
+                        authViewModel
                     )
                 }
                 composable("forget") {
                     ForgetPasswordScreen(navHostController)
                 }
+
             }
         }
     }

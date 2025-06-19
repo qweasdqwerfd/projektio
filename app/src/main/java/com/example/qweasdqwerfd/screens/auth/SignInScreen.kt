@@ -24,7 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.qweasdqwerfd.api.token.token_storage.TokenStorageImpl
+import com.example.qweasdqwerfd.api.token.token_storage.TokenStorageSingletonImpl
 import com.example.qweasdqwerfd.custom_components.authorization.sign_in.EmailOrNickNameField
 import com.example.qweasdqwerfd.custom_components.authorization.sign_in.PasswordSignInField
 import com.example.qweasdqwerfd.custom_components.authorization.sign_in.MainDivider
@@ -32,15 +32,14 @@ import com.example.qweasdqwerfd.custom_components.authorization.sign_in.CreatePr
 import com.example.qweasdqwerfd.custom_components.authorization.sign_in.ForgetPasswordTextButton
 import com.example.qweasdqwerfd.custom_components.authorization.sign_in.LogInButton
 import com.example.qweasdqwerfd.custom_components.authorization.sign_in.MainIcon
-import com.example.qweasdqwerfd.main_components.MyViewModel
+import com.example.qweasdqwerfd.main_components.view_models.AuthViewModel
 
 @Composable
 fun SignInScreen(
     navHostController: NavHostController,
-    viewModel: MyViewModel,
+    viewModel: AuthViewModel,
 ) {
-    val context = LocalContext.current
-    val tokenStorage = remember { TokenStorageImpl(context) }
+    val tokenStorage = TokenStorageSingletonImpl
 
     var emailOrNick by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }

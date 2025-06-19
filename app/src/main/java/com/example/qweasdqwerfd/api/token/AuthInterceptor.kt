@@ -1,5 +1,6 @@
 package com.example.qweasdqwerfd.api.token
 
+import android.util.Log
 import com.example.qweasdqwerfd.api.token.token_storage.TokenStorage
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
@@ -24,6 +25,8 @@ class AuthInterceptor(
                 tokenStorage.getAccessToken()
             }
 
+            Log.d("AuthInterceptor", "Токен: Bearer $accessToken")
+
             request = request.newBuilder()
                 .addHeader("Authorization", "Bearer $accessToken")
                 .build()
@@ -33,7 +36,6 @@ class AuthInterceptor(
 
         // Обработка истекшего токена
         if (response.code == 401 && !path.contains("/auth/login") && !path.contains("/auth/register")) {
-            response.close()
 
             val refreshToken = runBlocking {
                 tokenStorage.getRefreshToken()
@@ -57,6 +59,8 @@ class AuthInterceptor(
                 response
             }
         }
+
+
 
         return response
     }

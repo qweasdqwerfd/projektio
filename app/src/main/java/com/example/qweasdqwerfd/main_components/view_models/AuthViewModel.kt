@@ -1,4 +1,4 @@
-package com.example.qweasdqwerfd.main_components
+package com.example.qweasdqwerfd.main_components.view_models
 
 import android.app.Application
 import androidx.annotation.OptIn
@@ -13,12 +13,14 @@ import com.example.qweasdqwerfd.api.models.auth.AuthResponse
 import com.example.qweasdqwerfd.api.models.auth.LoginRequest
 import com.example.qweasdqwerfd.api.models.auth.RefreshRequest
 import com.example.qweasdqwerfd.api.models.auth.RegisterRequest
-import com.example.qweasdqwerfd.api.token.token_storage.TokenStorageImpl
+import com.example.qweasdqwerfd.api.token.token_storage.TokenStorageSingletonImpl
 import kotlinx.coroutines.launch
 
-class MyViewModel(application: Application) : AndroidViewModel(application) {
+class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val tokenStorage = TokenStorageImpl(application.applicationContext)
+    private val authApi = RetrofitClient.authApiService
+
+    private val tokenStorage = TokenStorageSingletonImpl
 
     private val _accessToken = mutableStateOf<String?>(null)
     val accessToken: State<String?> = _accessToken
@@ -42,7 +44,7 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
     fun registerUser(login: String, email: String, password: String) {
         viewModelScope.launch {
             try {
-                val response = RetrofitClient.instance.register(
+                val response = authApi.register(
                     RegisterRequest(login, email, password)
                 )
                 _registrationState.value = response.isSuccessful
@@ -62,7 +64,7 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
     fun loginUser(login: String, email: String, password: String) {
         viewModelScope.launch {
             try {
-                val response = RetrofitClient.instance.login(
+                val response = authApi.login(
                     LoginRequest(login = login, email = email, password = password)
                 )
                 if (response.isSuccessful) {
@@ -83,7 +85,7 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
     fun logout(refreshToken: String, onSuccess: () -> Unit, onError: (String) -> Unit) {
         viewModelScope.launch {
             try {
-                val response = RetrofitClient.instance.logout(RefreshRequest(refreshToken))
+                val response = authApi.logout(RefreshRequest(refreshToken))
 
                 Log.d("LOGOUT", "Токен перед отправкой logout: $refreshToken")
                 Log.d("LOGOUT", "Код ответа: ${response.code()}, тело: ${response.errorBody()?.string()}")
@@ -98,9 +100,4 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     }
-    fun clearAccessToken() {
-        _accessToken.value = null
-    }
-
-
 }

@@ -1,4 +1,4 @@
-package com.example.qweasdqwerfd.screens.tasks
+package com.example.qweasdqwerfd.screens.boards
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,10 +14,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.qweasdqwerfd.custom_components.main_screen.ExitButton
-import com.example.qweasdqwerfd.main_components.MyViewModel
+import com.example.qweasdqwerfd.main_components.view_models.AuthViewModel
 
 @Composable
-fun ProfileScreen(navHostController: NavHostController, viewModel: MyViewModel) {
+fun ProfileScreen(navHostController: NavHostController, viewModel: AuthViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()

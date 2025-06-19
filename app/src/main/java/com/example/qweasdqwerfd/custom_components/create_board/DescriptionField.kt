@@ -1,4 +1,4 @@
-package com.example.qweasdqwerfd.custom_components.create_task
+package com.example.qweasdqwerfd.custom_components.create_board
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding

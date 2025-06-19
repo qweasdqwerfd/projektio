@@ -22,12 +22,12 @@ import com.example.qweasdqwerfd.custom_components.authorization.sign_up.EmailFie
 import com.example.qweasdqwerfd.custom_components.authorization.sign_up.NicknameSignUpField
 import com.example.qweasdqwerfd.custom_components.authorization.sign_up.PasswordSignUpField
 import com.example.qweasdqwerfd.custom_components.authorization.sign_up.SecondPassword
-import com.example.qweasdqwerfd.main_components.MyViewModel
+import com.example.qweasdqwerfd.main_components.view_models.AuthViewModel
 
 @Composable
 fun SignUpScreen(
     navGraph: NavHostController,
-    viewModel: MyViewModel,
+    viewModel: AuthViewModel,
 ) {
     var nickname by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
