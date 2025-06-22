@@ -1,7 +1,6 @@
-package com.example.qweasdqwerfd.custom_components.create_board
+package com.example.qweasdqwerfd.custom_components.dialog
 
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
@@ -15,11 +14,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.unit.dp
 
 @Composable
 fun NameField(
     onTitleChanged: (String) -> Unit,
+    onText: String
 ) {
     var focusManager = LocalFocusManager.current
     var title by remember { mutableStateOf("") }
@@ -40,13 +39,12 @@ fun NameField(
     ),
     maxLines = 1,  // Максимум видимых строк
     label = { Text(
-        text = "Название",
+        text = onText,
         color = MaterialTheme.colorScheme.onSurface
     ) },
-    placeholder = { Text("Название") },
+    placeholder = { Text(onText) },
     modifier = Modifier
         .fillMaxWidth()
-        .padding(horizontal = 15.dp)
     ,
     singleLine = false, //многострочный ввод
     isError = isError,

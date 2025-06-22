@@ -6,16 +6,16 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 
 @Composable
-fun ProfileButton(navController: NavHostController) {
+fun CustomActionButton(
+    text: String,
+    onClick: () -> Unit
+) {
     Button(
-        onClick = {
-            navController.navigate("profile")
-        },
+        onClick = { onClick() },
         shape = RoundedCornerShape(10.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.primary,
@@ -23,8 +23,7 @@ fun ProfileButton(navController: NavHostController) {
         )
     ) {
        Text(
-           text = "Профиль",
-
+           text = text
        )
     }
 }

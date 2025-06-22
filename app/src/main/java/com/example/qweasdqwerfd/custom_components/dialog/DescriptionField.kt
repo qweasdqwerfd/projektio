@@ -1,7 +1,6 @@
-package com.example.qweasdqwerfd.custom_components.create_board
+package com.example.qweasdqwerfd.custom_components.dialog
 
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
@@ -15,7 +14,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.unit.dp
 
 @Composable
 fun DescriptionField(
@@ -48,7 +46,7 @@ fun DescriptionField(
         placeholder = { Text("Описание") },
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 15.dp),
+        ,
         singleLine = false,
         isError = isError,
         supportingText = {

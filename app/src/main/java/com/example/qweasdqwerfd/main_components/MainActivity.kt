@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.rememberNavController
 import com.example.qweasdqwerfd.instruments.ProjektioTheme
+import com.example.qweasdqwerfd.main_components.nav_scaffold.NavGraphAndScaffold
 import com.example.qweasdqwerfd.main_components.view_models.AuthViewModel
 
 class MainActivity : ComponentActivity() {
@@ -25,8 +26,8 @@ class MainActivity : ComponentActivity() {
 
             ProjektioTheme(darkTheme = true) {
                 NavGraphAndScaffold(
-                    authViewModel = viewModel,
                     navHostController = navController,
+                    authViewModel = viewModel,
                 )
             }
         }

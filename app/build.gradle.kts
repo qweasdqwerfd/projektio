@@ -48,6 +48,8 @@ dependencies {
     implementation ("androidx.datastore:datastore-preferences:1.0.0")
     implementation("androidx.constraintlayout:constraintlayout-compose:1.1.1")
 
+    implementation("androidx.compose.foundation:foundation:1.5.4")
+
 
 
 

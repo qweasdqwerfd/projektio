@@ -1,6 +1,7 @@
 package com.example.qweasdqwerfd.main_components.view_models
 
 import android.util.Log
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -20,10 +21,12 @@ class BoardViewModel : ViewModel() {
     private var _createState = mutableStateOf<BoardDataResponse?>(null)
     val createState: State<BoardDataResponse?> = _createState
 
+    private val _selectBoardId = mutableStateOf<Long?>(null)
+    var selectBoardId: MutableState<Long?> = _selectBoardId
+
 
     fun create(title: String, description: String?, isPrivate: Boolean?) {
         viewModelScope.launch {
-
             try {
 
                 val request = boardApi.createBoard(
@@ -60,5 +63,10 @@ class BoardViewModel : ViewModel() {
                 Log.d("boardd", "delete: $e")
             }
         }
+    }
+
+    fun selectBoard(boardId: Long) {
+        _selectBoardId.value = boardId
+        Log.d("columnn", "fetching columns for boardId = $boardId")
     }
 }

@@ -2,6 +2,8 @@ package com.example.qweasdqwerfd.api
 
 import com.example.qweasdqwerfd.api.service.AuthApiService
 import com.example.qweasdqwerfd.api.service.BoardApiService
+import com.example.qweasdqwerfd.api.service.ColumnApiService
+import com.example.qweasdqwerfd.api.service.TaskApiService
 import com.example.qweasdqwerfd.api.token.AuthInterceptor
 import com.example.qweasdqwerfd.api.token.AuthRepositoryImpl
 import com.example.qweasdqwerfd.api.token.token_storage.TokenStorage
@@ -46,5 +48,13 @@ object RetrofitClient {
 
     val boardApiService: BoardApiService by lazy {
         retrofit.create(BoardApiService::class.java)
+    }
+
+    val taskApiService: TaskApiService by lazy {
+        retrofit.create(TaskApiService::class.java)
+    }
+
+    val columnApiService: ColumnApiService by lazy {
+        retrofit.create(ColumnApiService::class.java)
     }
 }
