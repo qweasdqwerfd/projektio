@@ -1,6 +1,7 @@
 package com.example.qweasdqwerfd.main_components.view_models
 
 import android.util.Log
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -19,7 +20,10 @@ class ColumnViewModel : ViewModel() {
     val columns: State<List<ColumnDataResponse?>> = _columns
 
     private val _createState = mutableStateOf<ColumnDataResponse?>(null)
-    private val createState: State<ColumnDataResponse?> = _createState
+    val createState: State<ColumnDataResponse?> = _createState
+
+    private val _currentPosition = mutableStateOf<Int?>(null)
+    var currentPosition: MutableState<Int?> = _currentPosition
 
     fun create(boardId: Long, title: String) {
         viewModelScope.launch {
@@ -32,7 +36,6 @@ class ColumnViewModel : ViewModel() {
             }
         }
     }
-
 
 
     fun fetch(boardId: Long) {
@@ -55,22 +58,29 @@ class ColumnViewModel : ViewModel() {
     }
 
 
-
     fun delete(
         boardId: Long,
         columnPosition: Int
     ) {
-        try {
-            viewModelScope.launch {
-                val deleteColumn = columnApi.deleteColumn(
-                    boardId,
-                    columnPosition
-                )
-                _columns.value = _columns.value.filter { it?.columnPosition != columnPosition }
+        viewModelScope.launch {
+            try {
+                columnApi.deleteColumn(boardId, columnPosition)
+                fetch(boardId) // <- обновим список колонок
+                Log.d("columnn", "Колонка удалена")
+            } catch (e: Exception) {
+                Log.e("columnn", "Ошибка при удалении: ${e.message}")
             }
-        } catch (e: Exception) {
-            Log.d("columnn", "delete: $e")
         }
+    }
+
+
+    fun currentPos(curPos: Int) {
+        _currentPosition.value = curPos
+    }
+
+    fun clear() {
+        _columns.value = emptyList()
+        _currentPosition.value = 0
     }
 
 

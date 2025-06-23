@@ -24,7 +24,8 @@ fun Navigation(
     authViewModel: AuthViewModel,
     boardViewModel: BoardViewModel,
     columnViewModel: ColumnViewModel,
-    currentColumnTitle: MutableState<String>
+    currentColumnTitle: MutableState<String>,
+    showDialog: MutableState<Boolean>
 ) {
     val accessToken by authViewModel.accessToken
     val startDestination = if (!accessToken.isNullOrEmpty()) "all_tasks" else "sign_in"
@@ -43,7 +44,9 @@ fun Navigation(
         composable("all_tasks") {
             AllBoardsScreen(
                 boardViewModel,
-                navController
+                columnViewModel,
+                navController,
+                currentColumnTitle
             )
         }
 
@@ -57,13 +60,11 @@ fun Navigation(
             ColumnScreen(
                 columnViewModel,
                 boardViewModel,
+                currentColumnTitle,
+                navController,
+                showDialog
             )
         }
-        composable("boards") {
-            AllBoardsScreen(
-                boardViewModel = boardViewModel,
-                navController = navController
-            )
-        }
+
     }
 }

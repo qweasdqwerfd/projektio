@@ -60,7 +60,8 @@ fun NavGraphAndScaffold(
                 authViewModel = authViewModel,
                 boardViewModel = boardViewModel,
                 columnViewModel = columnViewModel,
-                currentColumnTitle
+                currentColumnTitle,
+                showDialog
             )
 
             if (showDialog.value && route == "all_tasks") {
@@ -74,7 +75,7 @@ fun NavGraphAndScaffold(
                     navController = navHostController,
                     onDismiss = { showDialog.value = false },
                     boardViewModel,
-                    columnViewModel
+                    columnViewModel,
                 )
             }
         }

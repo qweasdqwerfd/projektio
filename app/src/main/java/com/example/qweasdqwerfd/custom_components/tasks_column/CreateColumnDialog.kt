@@ -1,7 +1,7 @@
 package com.example.qweasdqwerfd.custom_components.tasks_column
 
-import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,8 +44,8 @@ fun CreateColumnDialog(
                     title = name
                 )
             }
-
-
+            navController.navigate("columns")
+            onDismiss()
 
 
         }

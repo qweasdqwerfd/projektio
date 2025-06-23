@@ -1,7 +1,8 @@
 package com.example.qweasdqwerfd.api.service
 
-import com.example.qweasdqwerfd.api.models.columns.CreateColumnRequest
 import com.example.qweasdqwerfd.api.models.columns.ColumnDataResponse
+import com.example.qweasdqwerfd.api.models.columns.CreateColumnRequest
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -25,6 +26,6 @@ interface ColumnApiService {
     suspend fun deleteColumn(
         @Path("boardId") boardId: Long,
         @Path("columnPosition") columnPosition: Int,
-    )
+    ): Response<Unit>
 
 }
