@@ -1,6 +1,10 @@
 package com.example.qweasdqwerfd.custom_components.tasks_column
 
+import android.util.Log
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,6 +27,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -35,11 +41,14 @@ import com.example.qweasdqwerfd.R
 import com.example.qweasdqwerfd.api.models.columns.ColumnDataResponse
 import com.example.qweasdqwerfd.api.models.tasks.TaskDtoResponse
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ColumnForTasks(
     tasks: List<TaskDtoResponse>,
+    selectedTasks: SnapshotStateList<Long>,
     onClickDelete: () -> Unit,
-    onClickAdd: () -> Unit
+    onClickAdd: () -> Unit,
+    onLongClickTask: (Long) -> Unit
 ) {
     ConstraintLayout(
         modifier = Modifier
@@ -61,7 +70,6 @@ fun ColumnForTasks(
                 containerColor = MaterialTheme.colorScheme.primary
             )
         ) {
-            // Задачи в скроллируемом списке внутри карточки
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
@@ -75,11 +83,25 @@ fun ColumnForTasks(
                 contentPadding = PaddingValues(bottom = 20.dp)
             ) {
                 items(tasks) { task ->
+                    val isSelected = selectedTasks.contains(task.id)
+                    val interactionSource = remember { MutableInteractionSource() }
+
                     Card(
-                        onClick = {},
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .combinedClickable(
+                                interactionSource = interactionSource,
+                                indication = null,
+                                onClick = {},
+                                onLongClick = {
+                                    Log.d("TaskLongClick", "Зажата задача ${task.id}")
+                                    onLongClickTask(task.id)
+                                }
+                            ),
                         shape = RoundedCornerShape(15.dp),
-                        colors = CardDefaults.cardColors(containerColor = Color.Gray)
+                        colors = CardDefaults.cardColors(
+                            containerColor = if (isSelected) Color.LightGray else Color.Gray
+                        )
                     ) {
                         Column(modifier = Modifier.padding(10.dp)) {
                             Text(
@@ -94,9 +116,11 @@ fun ColumnForTasks(
                             )
                         }
                     }
+
                 }
             }
         }
+
 
         Box(
             modifier = Modifier
@@ -140,6 +164,7 @@ fun ColumnForTasks(
                 }
             }
         }
+
 
     }
 }

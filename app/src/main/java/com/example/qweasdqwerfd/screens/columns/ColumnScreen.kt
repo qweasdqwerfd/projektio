@@ -14,6 +14,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -40,11 +41,12 @@ fun ColumnScreen(
     navController: NavHostController,
     showDialog: MutableState<Boolean>,
 ) {
-
     val columns by columnsViewModel.columns
     val selectedBoardId = boardViewModel.selectBoardId.value
     val currentPos = columnsViewModel.currentPosition
     val tasks by taskViewModel.tasks
+    val selectedTasks = remember { mutableStateListOf<Long>() }
+    val isSelectionMode = selectedTasks.isNotEmpty()
 
     val coroutineScope = rememberCoroutineScope()
     val selectedPage by columnsViewModel.currentPosition
@@ -54,91 +56,79 @@ fun ColumnScreen(
     var description by remember { mutableStateOf("") }
     val showCreateTaskDialog = remember { mutableStateOf(false) }
 
-
-
-
     LaunchedEffect(selectedBoardId) {
         if (selectedBoardId != null) {
             Log.d("ColumnScreen", "selectedBoardId = $selectedBoardId")
             columnsViewModel.fetch(selectedBoardId)
+            taskViewModel.fetch(selectedBoardId) // Изменено: теперь fetch с boardId
         }
     }
 
     if (columns.isEmpty()) {
-
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = "У вас нет колонок",
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-            Text(
-                text = "Создайте!",
-                style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.onSurface
-            )
+            Text("У вас нет колонок", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurface)
+            Text("Создайте!", style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.onSurface)
         }
-
     } else {
-        val pagerState = rememberPagerState(
-            initialPage = 0,
-            pageCount = { columns.size }
-        )
+        val pagerState = rememberPagerState(initialPage = 0, pageCount = { columns.size })
 
         LaunchedEffect(selectedPage) {
             selectedPage?.let {
-                coroutineScope.launch {
-                    pagerState.scrollToPage(it)
-                }
-                columnsViewModel.currentPos(null) // сброс
+                coroutineScope.launch { pagerState.scrollToPage(it) }
+                columnsViewModel.currentPos(null)
             }
         }
 
-
         LaunchedEffect(pagerState.currentPage, columns) {
-            currentTitle.value = columns[pagerState.currentPage]?.title.toString()
+            currentTitle.value = columns[pagerState.currentPage]?.title.orEmpty()
             columnsViewModel.currentPos(pagerState.currentPage)
-
-            if (selectedBoardId != null) {
-                taskViewModel.fetch(selectedBoardId)
-            }
-
-
         }
 
         CompositionLocalProvider(LocalCurrentColumnTitle provides currentTitle.toString()) {
-            HorizontalPager(
-                state = pagerState,
-                modifier = Modifier.fillMaxSize()
-            ) { page ->
-                val currentColumnId = columns.getOrNull(page)?.id
-                val filteredTasks = tasks.filter { it.columnId == currentColumnId }
+            HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) { page ->
+                val columnId = columns[page]?.id ?: return@HorizontalPager
 
                 ColumnForTasks(
-                    tasks = filteredTasks,
+                    tasks = tasks.filter { it.columnId == columnId },
+                    selectedTasks = selectedTasks,
                     onClickDelete = {
-                        if (selectedBoardId != null) {
-                            currentPos.value?.let { pos ->
+                        if (isSelectionMode) {
+                            val idsToDelete = selectedTasks.toList()
+                            taskViewModel.deleteTasks(idsToDelete) {
+                                taskViewModel.fetch(columnId)
+                            }
+                            selectedTasks.clear()
+                        } else if (selectedBoardId != null) {
+                            val columnPosition = pagerState.currentPage
+                            val columnIdToDelete = columns.getOrNull(columnPosition)?.id
+
+                            if (columnIdToDelete != null) {
                                 columnsViewModel.delete(
                                     boardId = selectedBoardId,
-                                    columnPosition = pos
+                                    columnPosition = columnPosition
                                 )
+                                navController.navigate("columns")
+                                showDialog.value = false
+                                Toast.makeText(
+                                    context,
+                                    "Колонка ${columns[columnPosition]?.title} удалена.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                         }
-                        navController.navigate("columns")
-                        showDialog.value = false
-                        Toast.makeText(
-                            context,
-                            "Колонка ${currentTitle.value} удалена.",
-                            Toast.LENGTH_SHORT
-                        ).show()
+
                     },
-                    onClickAdd = {
-                        showCreateTaskDialog.value = true
+                    onClickAdd = { showCreateTaskDialog.value = true },
+                    onLongClickTask = { taskId ->
+                        if (selectedTasks.contains(taskId)) {
+                            selectedTasks.remove(taskId)
+                        } else {
+                            selectedTasks.add(taskId)
+                        }
                     }
                 )
             }
@@ -149,17 +139,11 @@ fun ColumnScreen(
                 title = "Создание задачи",
                 onDismiss = { showCreateTaskDialog.value = false },
                 nameField = {
-                    NameField(
-                        onTitleChanged = { name = it },
-                        onText = name
-                    )
+                    NameField(onTitleChanged = { name = it }, onText = name)
                 },
                 privateBoardCheckbox = null,
                 descriptionField = {
-                    NameField(
-                        onTitleChanged = { description = it },
-                        onText = description
-                    )
+                    NameField(onTitleChanged = { description = it }, onText = description)
                 },
                 onClickCreateButton = {
                     val columnId = columns.getOrNull(pagerState.currentPage)?.id
@@ -177,10 +161,7 @@ fun ColumnScreen(
                         description = ""
                     }
                 }
-
-
             )
         }
-
     }
 }

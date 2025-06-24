@@ -10,24 +10,25 @@ import com.example.qweasdqwerfd.api.RetrofitClient
 import com.example.qweasdqwerfd.api.models.tasks.CreateTaskDtoRequest
 import kotlinx.coroutines.launch
 
-class   TaskViewModel : ViewModel() {
+// TaskViewModel.kt
 
+class TaskViewModel : ViewModel() {
     private val taskApi = RetrofitClient.taskApiService
-
-    private val _createState = mutableStateOf<TaskDtoResponse?>(null)
-    val createState: State<TaskDtoResponse?> = _createState
 
     private val _tasks = mutableStateOf<List<TaskDtoResponse>>(emptyList())
     val tasks: State<List<TaskDtoResponse>> = _tasks
 
-    fun fetch(boardId: Long) {
+    private val _createState = mutableStateOf<TaskDtoResponse?>(null)
+    val createState: State<TaskDtoResponse?> = _createState
+
+    fun fetch(columnId: Long) {
         viewModelScope.launch {
             try {
-                val response = taskApi.getTasks(boardId)
-                _tasks.value = response
-                Log.d("TaskViewModel", "Задачи обновлены: ${response.size}")
+                val result = taskApi.getTasks(columnId)
+                _tasks.value = result
+                Log.d("TaskViewModel", "Задачи обновлены: ${result.size}")
             } catch (e: Exception) {
-                Log.e("TaskViewModel", "Ошибка при получении задач: $e")
+                Log.e("TaskViewModel", "Ошибка при получении задач", e)
             }
         }
     }
@@ -44,26 +45,36 @@ class   TaskViewModel : ViewModel() {
             try {
                 Log.d("TaskViewModel", "Создание задачи запущено")
                 Log.d("TaskViewModel", "Данные: title=$title, desc=$description, assigneeId=$assigneeId, createdBy=$createdBy, boardId=$boardId, columnId=$columnId")
-
-                val response = taskApi.createTask(
+                val request = taskApi.createTask(
                     CreateTaskDtoRequest(
-                        title, description, assigneeId, createdBy, boardId, columnId
+                        title,
+                        description,
+                        assigneeId,
+                        createdBy,
+                        boardId,
+                        columnId
                     )
                 )
-
-                Log.d("TaskViewModel", "Задача успешно создана: $response")
-
-                // после создания — сразу загружаем заново
-                fetch(boardId)
-
+                Log.d("TaskViewModel", "Задача успешно создана: $request")
+                fetch(columnId)
             } catch (e: Exception) {
-                Log.e("TaskViewModel", "Ошибка при создании задачи: $e")
+                Log.e("TaskViewModel", "Ошибка при создании задачи: ${e.message}")
             }
         }
     }
 
-
-
-
-
+    fun deleteTasks(ids: List<Long>, onSuccess: () -> Unit) {
+        viewModelScope.launch {
+            try {
+                ids.forEach { id ->
+                    taskApi.deleteTask(id)
+                }
+                onSuccess()
+            } catch (e: Exception) {
+                Log.e("TaskViewModel", "Ошибка при удалении задач: ${e.message}")
+            }
+        }
+    }
 }
+
+
