@@ -10,7 +10,7 @@ import com.example.qweasdqwerfd.api.RetrofitClient
 import com.example.qweasdqwerfd.api.models.tasks.CreateTaskDtoRequest
 import kotlinx.coroutines.launch
 
-class TaskViewModel : ViewModel() {
+class   TaskViewModel : ViewModel() {
 
     private val taskApi = RetrofitClient.taskApiService
 
@@ -19,6 +19,18 @@ class TaskViewModel : ViewModel() {
 
     private val _tasks = mutableStateOf<List<TaskDtoResponse>>(emptyList())
     val tasks: State<List<TaskDtoResponse>> = _tasks
+
+    fun fetch(boardId: Long) {
+        viewModelScope.launch {
+            try {
+                val response = taskApi.getTasks(boardId)
+                _tasks.value = response
+                Log.d("TaskViewModel", "Задачи обновлены: ${response.size}")
+            } catch (e: Exception) {
+                Log.e("TaskViewModel", "Ошибка при получении задач: $e")
+            }
+        }
+    }
 
     fun create(
         title: String,
@@ -30,38 +42,28 @@ class TaskViewModel : ViewModel() {
     ) {
         viewModelScope.launch {
             try {
+                Log.d("TaskViewModel", "Создание задачи запущено")
+                Log.d("TaskViewModel", "Данные: title=$title, desc=$description, assigneeId=$assigneeId, createdBy=$createdBy, boardId=$boardId, columnId=$columnId")
 
-                val request = taskApi.createTask(
+                val response = taskApi.createTask(
                     CreateTaskDtoRequest(
-                        title,
-                        description,
-                        assigneeId,
-                        createdBy,
-                        boardId,
-                        columnId
+                        title, description, assigneeId, createdBy, boardId, columnId
                     )
                 )
 
-                _createState.value = request
+                Log.d("TaskViewModel", "Задача успешно создана: $response")
+
+                // после создания — сразу загружаем заново
+                fetch(boardId)
 
             } catch (e: Exception) {
-                Log.d("task", "create: $e")
+                Log.e("TaskViewModel", "Ошибка при создании задачи: $e")
             }
         }
     }
 
-    fun getTasks(
-        boardId: Long
-    ) {
-        viewModelScope.launch {
-            try {
 
-                val temp = taskApi.getTasks(boardId)
 
-                _tasks.value = temp
-            } catch (e: Exception) {
-                Log.d("task", "getTasks: $e")
-            }
-        }
-    }
+
+
 }

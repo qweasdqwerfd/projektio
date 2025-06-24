@@ -17,13 +17,15 @@ import com.example.qweasdqwerfd.main_components.view_models.BoardViewModel
 import com.example.qweasdqwerfd.main_components.view_models.ColumnViewModel
 import com.example.qweasdqwerfd.custom_components.board.CreateBoardDialog
 import com.example.qweasdqwerfd.custom_components.tasks_column.CreateColumnDialog
+import com.example.qweasdqwerfd.main_components.view_models.TaskViewModel
 
 @Composable
 fun NavGraphAndScaffold(
     navHostController: NavHostController,
     authViewModel: AuthViewModel = viewModel(),
     boardViewModel: BoardViewModel = viewModel(),
-    columnViewModel: ColumnViewModel = viewModel()
+    columnViewModel: ColumnViewModel = viewModel(),
+    taskViewModel: TaskViewModel = viewModel()
 ) {
     val route = currentRoute(navHostController).value
     val showDialog = remember { mutableStateOf(false) }
@@ -36,7 +38,8 @@ fun NavGraphAndScaffold(
                 TopBar(
                     navHostController,
                     route,
-                    currentColumnTitle.value
+                    currentColumnTitle.value,
+                    columnViewModel
                 )
             }
         },
@@ -61,6 +64,7 @@ fun NavGraphAndScaffold(
                 boardViewModel = boardViewModel,
                 columnViewModel = columnViewModel,
                 currentColumnTitle,
+                taskViewModel,
                 showDialog
             )
 

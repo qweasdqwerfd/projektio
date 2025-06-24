@@ -74,7 +74,7 @@ class ColumnViewModel : ViewModel() {
     }
 
 
-    fun currentPos(curPos: Int) {
+    fun currentPos(curPos: Int?) {
         _currentPosition.value = curPos
     }
 

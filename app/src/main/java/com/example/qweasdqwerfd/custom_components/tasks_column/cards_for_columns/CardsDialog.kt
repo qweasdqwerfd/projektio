@@ -21,12 +21,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.example.qweasdqwerfd.api.models.columns.ColumnDataResponse
 
 @Composable
 fun CardsDialog(
-    cardItems: List<String>,
+    cardItems: List<ColumnDataResponse?>,
     onDismiss: () -> Unit,
-    onClickCard: () -> Unit
+    onClickCard: (Int) -> Unit
 ) {
     Dialog(onDismissRequest = onDismiss) {
         Surface(
@@ -55,17 +56,19 @@ fun CardsDialog(
                 ) {
                     items(cardItems) { item ->
                         Card(
-                            onClick = {  },
+                            onClick = { item?.columnPosition?.let { onClickCard(it) } },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(vertical = 4.dp),
                             elevation = CardDefaults.cardElevation(2.dp)
                         ) {
-                            Text(
-                                text = item,
-                                modifier = Modifier
-                                    .padding(16.dp)
-                            )
+                            item?.title?.let {
+                                Text(
+                                    text = it,
+                                    modifier = Modifier
+                                        .padding(16.dp)
+                                )
+                            }
                         }
                     }
                 }

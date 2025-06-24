@@ -12,7 +12,7 @@ import com.example.qweasdqwerfd.R
 @Composable
 fun MainIcon() {
     Icon(
-        painter = painterResource(R.drawable.app),
+        painter = painterResource(R.drawable.logo),
         contentDescription = "main_icon",
         modifier = Modifier
             .padding(bottom = 20.dp)

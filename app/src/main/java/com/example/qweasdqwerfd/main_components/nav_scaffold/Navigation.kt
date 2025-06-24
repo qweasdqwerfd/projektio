@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import com.example.qweasdqwerfd.main_components.view_models.AuthViewModel
 import com.example.qweasdqwerfd.main_components.view_models.BoardViewModel
 import com.example.qweasdqwerfd.main_components.view_models.ColumnViewModel
+import com.example.qweasdqwerfd.main_components.view_models.TaskViewModel
 import com.example.qweasdqwerfd.screens.auth.ForgetPasswordScreen
 import com.example.qweasdqwerfd.screens.auth.SignInScreen
 import com.example.qweasdqwerfd.screens.auth.SignUpScreen
@@ -25,6 +26,7 @@ fun Navigation(
     boardViewModel: BoardViewModel,
     columnViewModel: ColumnViewModel,
     currentColumnTitle: MutableState<String>,
+    taskViewModel: TaskViewModel,
     showDialog: MutableState<Boolean>
 ) {
     val accessToken by authViewModel.accessToken
@@ -60,6 +62,7 @@ fun Navigation(
             ColumnScreen(
                 columnViewModel,
                 boardViewModel,
+                taskViewModel,
                 currentColumnTitle,
                 navController,
                 showDialog

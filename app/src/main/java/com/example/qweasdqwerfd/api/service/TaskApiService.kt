@@ -13,17 +13,18 @@ import retrofit2.http.Query
 
 interface TaskApiService {
 
-    @POST("tasks")
+    @POST("/api/tasks")
     suspend fun createTask(
         @Body task: CreateTaskDtoRequest
     ): TaskDtoResponse
 
-    @GET("tasks")
+    @GET("/api/tasks")
     suspend fun getTasks(
         @Query("boardId") boardId: Long
     ): List<TaskDtoResponse>
 
-    @DELETE("tasks/{taskId}")
+
+    @DELETE("/api/tasks/{taskId}")
     suspend fun deleteTask(
         @Path("taskId") taskId: Long
     ): Response<Unit> // Используем Response<Unit> для получения status code
