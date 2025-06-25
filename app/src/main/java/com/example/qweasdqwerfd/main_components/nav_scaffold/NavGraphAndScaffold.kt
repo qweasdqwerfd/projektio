@@ -5,6 +5,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -31,6 +34,9 @@ fun NavGraphAndScaffold(
     val showDialog = remember { mutableStateOf(false) }
 
     val currentColumnTitle = remember { mutableStateOf("Колонка") }
+    val selectedTasks = remember { mutableStateListOf<Long>() }
+    val isSelectionMode by remember { derivedStateOf { selectedTasks.isNotEmpty() } }
+
 
     Scaffold(
         topBar = {
@@ -39,7 +45,8 @@ fun NavGraphAndScaffold(
                     navHostController,
                     route,
                     currentColumnTitle.value,
-                    columnViewModel
+                    columnViewModel,
+                    selectedTasks
                 )
             }
         },
@@ -65,7 +72,9 @@ fun NavGraphAndScaffold(
                 columnViewModel = columnViewModel,
                 currentColumnTitle,
                 taskViewModel,
-                showDialog
+                showDialog,
+                selectedTasks,
+                isSelectionMode
             )
 
             if (showDialog.value && route == "all_tasks") {

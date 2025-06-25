@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -27,7 +28,9 @@ fun Navigation(
     columnViewModel: ColumnViewModel,
     currentColumnTitle: MutableState<String>,
     taskViewModel: TaskViewModel,
-    showDialog: MutableState<Boolean>
+    showDialog: MutableState<Boolean>,
+    selectedTasks: SnapshotStateList<Long>,
+    isSelectionMode: Boolean
 ) {
     val accessToken by authViewModel.accessToken
     val startDestination = if (!accessToken.isNullOrEmpty()) "all_tasks" else "sign_in"
@@ -65,7 +68,9 @@ fun Navigation(
                 taskViewModel,
                 currentColumnTitle,
                 navController,
-                showDialog
+                showDialog,
+                selectedTasks,
+                isSelectionMode
             )
         }
 

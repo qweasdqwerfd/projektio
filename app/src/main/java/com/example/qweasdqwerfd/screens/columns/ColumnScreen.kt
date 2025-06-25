@@ -14,11 +14,11 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -40,13 +40,13 @@ fun ColumnScreen(
     currentTitle: MutableState<String>,
     navController: NavHostController,
     showDialog: MutableState<Boolean>,
+    selectedTasks: SnapshotStateList<Long>,
+    isSelectionMode: Boolean,
 ) {
     val columns by columnsViewModel.columns
     val selectedBoardId = boardViewModel.selectBoardId.value
     val currentPos = columnsViewModel.currentPosition
     val tasks by taskViewModel.tasks
-    val selectedTasks = remember { mutableStateListOf<Long>() }
-    val isSelectionMode = selectedTasks.isNotEmpty()
 
     val coroutineScope = rememberCoroutineScope()
     val selectedPage by columnsViewModel.currentPosition
@@ -60,7 +60,7 @@ fun ColumnScreen(
         if (selectedBoardId != null) {
             Log.d("ColumnScreen", "selectedBoardId = $selectedBoardId")
             columnsViewModel.fetch(selectedBoardId)
-            taskViewModel.fetch(selectedBoardId) // Изменено: теперь fetch с boardId
+            taskViewModel.fetch(selectedBoardId) 
         }
     }
 
@@ -78,10 +78,12 @@ fun ColumnScreen(
 
         LaunchedEffect(selectedPage) {
             selectedPage?.let {
-                coroutineScope.launch { pagerState.scrollToPage(it) }
-                columnsViewModel.currentPos(null)
+                coroutineScope.launch {
+                    pagerState.scrollToPage(it)
+                }
             }
         }
+
 
         LaunchedEffect(pagerState.currentPage, columns) {
             currentTitle.value = columns[pagerState.currentPage]?.title.orEmpty()
@@ -95,40 +97,45 @@ fun ColumnScreen(
                 ColumnForTasks(
                     tasks = tasks.filter { it.columnId == columnId },
                     selectedTasks = selectedTasks,
-                    onClickDelete = {
+                    isSelectionMode = isSelectionMode,
+                    onClickDelete = onClickDelete@{
                         if (isSelectionMode) {
                             val idsToDelete = selectedTasks.toList()
                             taskViewModel.deleteTasks(idsToDelete) {
                                 taskViewModel.fetch(columnId)
                             }
                             selectedTasks.clear()
-                        } else if (selectedBoardId != null) {
-                            val columnPosition = pagerState.currentPage
-                            val columnIdToDelete = columns.getOrNull(columnPosition)?.id
+                        } else {
+                            val boardId = selectedBoardId
+                            val position = currentPos.value
 
-                            if (columnIdToDelete != null) {
-                                columnsViewModel.delete(
-                                    boardId = selectedBoardId,
-                                    columnPosition = columnPosition
-                                )
-                                navController.navigate("columns")
-                                showDialog.value = false
-                                Toast.makeText(
-                                    context,
-                                    "Колонка ${columns[columnPosition]?.title} удалена.",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                            if (boardId == null || position == null) {
+                                Log.d("ColumnScreen", "Удаление невозможно: boardId=$boardId, pos=$position")
+                                return@onClickDelete
                             }
+
+                            Log.d("ColumnScreen", "Удаление колонки: boardId=$boardId, pos=$position")
+                            columnsViewModel.delete(boardId = boardId, columnPosition = position)
+
+                            navController.navigate("columns")
+                            showDialog.value = false
+                            Toast.makeText(
+                                context,
+                                "Колонка ${currentTitle.value} удалена.",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
 
-                    },
+                    }
+
+,
                     onClickAdd = { showCreateTaskDialog.value = true },
                     onLongClickTask = { taskId ->
-                        if (selectedTasks.contains(taskId)) {
-                            selectedTasks.remove(taskId)
-                        } else {
-                            selectedTasks.add(taskId)
-                        }
+                        if (!selectedTasks.contains(taskId)) selectedTasks.add(taskId)
+                    },
+                    onClickTask = { taskId ->
+                        if (selectedTasks.contains(taskId)) selectedTasks.remove(taskId)
+                        else selectedTasks.add(taskId)
                     }
                 )
             }
@@ -139,11 +146,11 @@ fun ColumnScreen(
                 title = "Создание задачи",
                 onDismiss = { showCreateTaskDialog.value = false },
                 nameField = {
-                    NameField(onTitleChanged = { name = it }, onText = name)
+                    NameField(onTitleChanged = { name = it }, onText = "Название задачи")
                 },
                 privateBoardCheckbox = null,
                 descriptionField = {
-                    NameField(onTitleChanged = { description = it }, onText = description)
+                    NameField(onTitleChanged = { description = it }, onText = "Описание задачи")
                 },
                 onClickCreateButton = {
                     val columnId = columns.getOrNull(pagerState.currentPage)?.id

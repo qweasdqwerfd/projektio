@@ -64,6 +64,7 @@ class ColumnViewModel : ViewModel() {
     ) {
         viewModelScope.launch {
             try {
+                Log.d("columnn", "Удаление колонки: boardId=$currentPosition")
                 columnApi.deleteColumn(boardId, columnPosition)
                 fetch(boardId) // <- обновим список колонок
                 Log.d("columnn", "Колонка удалена")

@@ -7,16 +7,24 @@ import com.example.qweasdqwerfd.custom_components.tasks_column.LocalCurrentColum
 @Composable
 fun TopBarTitle(
     currentRoute: String,
-    columnTitle: String?
+    columnTitle: String?,
+    selectedCount: Int = 0
 ) {
     val title = when (currentRoute) {
         "sign_up" -> "Создать профиль"
         "all_tasks" -> "Мои доски"
         "profile" -> "Профиль"
         "forget" -> "Восстановление пароля"
-        "columns" -> columnTitle ?: "Колонка"
+        "columns" -> {
+            if (selectedCount > 0) {
+                "$selectedCount выбрано"
+            } else {
+                columnTitle ?: "Колонка"
+            }
+        }
         else -> ""
     }
 
     Text(text = title)
 }
+

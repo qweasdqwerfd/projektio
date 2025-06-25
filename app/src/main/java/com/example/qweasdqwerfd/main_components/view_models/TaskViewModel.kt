@@ -10,8 +10,6 @@ import com.example.qweasdqwerfd.api.RetrofitClient
 import com.example.qweasdqwerfd.api.models.tasks.CreateTaskDtoRequest
 import kotlinx.coroutines.launch
 
-// TaskViewModel.kt
-
 class TaskViewModel : ViewModel() {
     private val taskApi = RetrofitClient.taskApiService
 
@@ -56,7 +54,7 @@ class TaskViewModel : ViewModel() {
                     )
                 )
                 Log.d("TaskViewModel", "Задача успешно создана: $request")
-                fetch(columnId)
+                _tasks.value = _tasks.value + request
             } catch (e: Exception) {
                 Log.e("TaskViewModel", "Ошибка при создании задачи: ${e.message}")
             }
@@ -69,6 +67,8 @@ class TaskViewModel : ViewModel() {
                 ids.forEach { id ->
                     taskApi.deleteTask(id)
                 }
+                // Локально удалить таски из текущего списка
+                _tasks.value = _tasks.value.filterNot { it.id in ids }
                 onSuccess()
             } catch (e: Exception) {
                 Log.e("TaskViewModel", "Ошибка при удалении задач: ${e.message}")

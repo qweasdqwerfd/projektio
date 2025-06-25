@@ -9,6 +9,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -43,37 +44,37 @@ fun ProfileScreen(navHostController: NavHostController, viewModel: AuthViewModel
                      style = MaterialTheme.typography.titleLarge
                  )
                  Text(
-                     text = "2",
+                     text = "12",
                      color = MaterialTheme.colorScheme.onSurface,
                      style = MaterialTheme.typography.bodyMedium
 
                  )
-                 Text(
-                     text = "Логин",
-                     style = MaterialTheme.typography.titleLarge
-                 )
-                 Text(
-                     text = "pupsik",
-                     color = MaterialTheme.colorScheme.onSurface,
-                     style = MaterialTheme.typography.bodyMedium
-
-                 )
-                 Text(
-                     text = "Email",
-                     style = MaterialTheme.typography.titleMedium
-                 )
-                 Text(
-                     text = "pupsik@yandex.ru",
-                     color = MaterialTheme.colorScheme.onSurface,
-                     style = MaterialTheme.typography.bodyMedium
-
-                 )
+//                 Text(
+//                     text = "Логин",
+//                     style = MaterialTheme.typography.titleLarge
+//                 )
+//                 Text(
+//                     text = login.toString(),
+//                     color = MaterialTheme.colorScheme.onSurface,
+//                     style = MaterialTheme.typography.bodyMedium
+//
+//                 )
+//                 Text(
+//                     text = "Email",
+//                     style = MaterialTheme.typography.titleMedium
+//                 )
+//                 Text(
+//                     text = email.toString(),
+//                     color = MaterialTheme.colorScheme.onSurface,
+//                     style = MaterialTheme.typography.bodyMedium
+//
+//                 )
                  Text(
                      text = "Дата регистрации",
                      style = MaterialTheme.typography.titleLarge
                  )
                  Text(
-                     text = "5.16.2025",
+                     text = "26.06.2025",
                      color = MaterialTheme.colorScheme.onSurface,
                      style = MaterialTheme.typography.bodyMedium
                  )

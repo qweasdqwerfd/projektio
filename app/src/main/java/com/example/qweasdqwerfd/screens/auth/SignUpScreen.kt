@@ -87,21 +87,23 @@ fun SignUpScreen(
             null -> { /* ничего */ }
 
             true -> {
-                Text("Регистрация успешна!", color = Color.Green)
-                navGraph.navigate("all_tasks")
-
-                // После чего сбрасывать состояние, например:
                 LaunchedEffect(Unit) {
+
+                    // ✅ Переходим на экран входа
+                    navGraph.navigate("sign_in") {
+                        popUpTo("sign_up") { inclusive = true } // удалим экран регистрации из back stack
+                    }
+
+                    // ✅ Сброс состояния
                     viewModel.resetRegistrationState()
                 }
             }
 
             false -> {
                 Text("Ошибка регистрации", color = Color.Red)
-                // Сброс ошибки по желанию или повторная попытка
             }
         }
 
+
     }
 }
-
